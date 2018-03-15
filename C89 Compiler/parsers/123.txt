@@ -1,0 +1,90 @@
+int zz(int a, int b, int c){
+if(a=b){
+int a;
+} else{
+int adsfasdf;
+}
+}
+
+int zz(int a, int b, int c){
+if(a=b){
+int a;
+return
+} else{
+int adsfasdf;
+}
+}
+
+
+int zz(int a, int b, int c){
+if(a=b){
+int a;
+int b;
+}
+}
+
+
+
+
+
+g++  -std=c++11 -W -Wall -g -Wno-unused-parameter -I include  -c -o src/c_parser.o src/c_parser.cpp
+In file included from include/ast.hpp:12:0,
+                 from src/c_parser.cpp:1:
+include/ast/ast_assign.hpp: In constructor ‘Assign::Assign(const Program*, const string*, const Program*)’:
+include/ast/ast_assign.hpp:14:24: warning: ‘Assign::id’ will be initialized after [-Wreorder]
+     const std::string *id;
+                        ^
+include/ast/ast_assign.hpp:13:20: warning:   ‘const Program* Assign::pgm2’ [-Wreorder]
+     const Program *pgm2;
+                    ^
+include/ast/ast_assign.hpp:16:5: warning:   when initialized here [-Wreorder]
+     Assign(const Program *_pgm1,const std::string *_id,const Program *_pgm2)
+     ^
+bison -v -d src/c_parser.y -o src/c_parser.tab.cpp
+src/c_parser.y: warning: 1 nonterminal useless in grammar [-Wother]
+src/c_parser.y: warning: 1 rule useless in grammar [-Wother]
+src/c_parser.y:33.34-42: warning: nonterminal useless in grammar: CAST_EXPR [-Wother]
+ %type <expr> FUNC_LIST FUNCTION  CAST_EXPR  IF_STATEMENT /* COND_EXPR MULT_EXPR ADD_EXPR SHIFT_EXPR RELATIONAL_EXPR EQUA_EXPR*/
+                                  ^^^^^^^^^
+src/c_parser.y:91.13-36: warning: rule useless in grammar [-Wother]
+ CAST_EXPR : NOTARRAY_EXPR {$$ = $1;}
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+g++  -std=c++11 -W -Wall -g -Wno-unused-parameter -I include  -c -o src/c_parser.tab.o src/c_parser.tab.cpp
+In file included from include/ast.hpp:12:0,
+                 from src/c_parser.y:3:
+include/ast/ast_assign.hpp: In constructor ‘Assign::Assign(const Program*, const string*, const Program*)’:
+include/ast/ast_assign.hpp:14:24: warning: ‘Assign::id’ will be initialized after [-Wreorder]
+     const std::string *id;
+                        ^
+include/ast/ast_assign.hpp:13:20: warning:   ‘const Program* Assign::pgm2’ [-Wreorder]
+     const Program *pgm2;
+                    ^
+include/ast/ast_assign.hpp:16:5: warning:   when initialized here [-Wreorder]
+     Assign(const Program *_pgm1,const std::string *_id,const Program *_pgm2)
+     ^
+flex -o src/c_parser.yy.cpp  src/c_parser.flex
+g++  -std=c++11 -W -Wall -g -Wno-unused-parameter -I include  -c -o src/c_parser.yy.o src/c_parser.yy.cpp
+In file included from include/ast.hpp:12:0,
+                 from src/c_parser.y:3,
+                 from src/c_parser.flex:7:
+include/ast/ast_assign.hpp: In constructor ‘Assign::Assign(const Program*, const string*, const Program*)’:
+include/ast/ast_assign.hpp:14:24: warning: ‘Assign::id’ will be initialized after [-Wreorder]
+     const std::string *id;
+                        ^
+include/ast/ast_assign.hpp:13:20: warning:   ‘const Program* Assign::pgm2’ [-Wreorder]
+     const Program *pgm2;
+                    ^
+include/ast/ast_assign.hpp:16:5: warning:   when initialized here [-Wreorder]
+     Assign(const Program *_pgm1,const std::string *_id,const Program *_pgm2)
+     ^
+src/c_parser.yy.cpp: In function ‘int yy_get_next_buffer()’:
+src/c_parser.yy.cpp:1316:44: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  if ((int) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_s
+                                            ^
+src/c_parser.yy.cpp: At global scope:
+src/c_parser.yy.cpp:1392:17: warning: ‘void yyunput(int, char*)’ defined but not used [-Wunused-function]
+     static void yyunput (int c, char * yy_bp )
+                 ^
+mkdir -p bin
+g++ -std=c++11 -W -Wall -g -Wno-unused-parameter -I include -o bin/c_parser src/c_parser.o src/c_parser.tab.o src/c_parser.yy.o
+

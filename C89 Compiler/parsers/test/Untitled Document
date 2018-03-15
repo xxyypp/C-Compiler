@@ -1,0 +1,42 @@
+          /*  | COND_EXPR {$$ = $1;}
+
+COND_EXPR : LOGIC_OR_EXPR {$$=$1;}
+          | LOGIC_OR_EXPR T_QUESTION EXPR T_COLON COND_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+LOGIC_OR_EXPR : LOGIC_AND_EXPR {$$=$1;}
+              | LOGIC_OR_EXPR OR_OP LOGIC_AND_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+LOGIC_AND_EXPR : INCLUSIVE_OR_EXPR {$$=$1;}
+               | LOGIC_AND_EXPR AND_OP INCLUSIVE_OR_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+INCLUSIVE_OR_EXPR : EXCLUSIVE_OR_EXPR {$$=$1;}
+                  | INCLUSIVE_OR_EXPR T_OR EXCLUSIVE_OR_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+EXCLUSIVE_OR_EXPR : AND_EXPR {$$=$1;}
+                  | EXCLUSIVE_OR_EXPR T_XOR AND_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+AND_EXPR : EQUA_EXPR {$$=$1;}
+         | AND_EXPR T_AND EQUA_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+EQUA_EXPR : RELATIONAL_EXPR {$$=$1;}
+          | EQUA_EXPR EQ_OP RELATIONAL_EXPR {$$=new Two_Program_Expr($1,$3);}
+          | EQUA_EXPR NE_OP RELATIONAL_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+RELATIONAL_EXPR : SHIFT_EXPR {$$=$1;}
+                | RELATIONAL_EXPR T_LARROW SHIFT_EXPR {$$=new Two_Program_Expr($1,$3);}
+                | RELATIONAL_EXPR T_RARROW SHIFT_EXPR {$$=new Two_Program_Expr($1,$3);}
+                | RELATIONAL_EXPR LE_OP SHIFT_EXPR {$$=new Two_Program_Expr($1,$3);}
+                | RELATIONAL_EXPR GE_OP SHIFT_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+SHIFT_EXPR : ADD_EXPR {$$=$1;}
+           | SHIFT_EXPR LEFT_OP ADD_EXPR {$$=new Two_Program_Expr($1,$3);}
+           | SHIFT_EXPR RIGHT_OP ADD_EXPR {$$=new Two_Program_Expr($1,$3);}
+
+ADD_EXPR : MULT_EXPR {$$=$1;}
+         | ADD_EXPR T_ADD MULT_EXPR {$$=new Two_Program_Expr($1,$3);}
+         | ADD_EXPR T_MINUS MULT_EXPR { $$=new Two_Program_Expr($1,$3);}
+
+MULT_EXPR : CAST_EXPR {$$=$1;}
+          | MULT_EXPR T_MULT CAST_EXPR {$$=new Two_Program_Expr($1,$3);}
+          | MULT_EXPR T_DIVID CAST_EXPR {$$=new Two_Program_Expr($1,$3);}
+          | MULT_EXPR T_MOD CAST_EXPR {$$=new Two_Program_Expr($1,$3);}*/

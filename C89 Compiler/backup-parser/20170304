@@ -1,0 +1,164 @@
+
+%code requires{
+  #include "ast.hpp"
+
+  #include <cassert>
+
+  extern const Program *g_root; // A way of getting the AST out
+
+  //! This is to fix problems when generating C++
+  // We are declaring the functions provided by Flex, so
+  // that Bison generated code can call them.
+  int yylex(void);
+  void yyerror(const char *);
+}
+
+// Represents the value associated with any kind of
+// AST node.
+%union{
+  const Program *expr;
+  double number;
+  std::string *string;
+}
+
+%token T_NUMBER T_ID T_INT T_LBRACKET T_RBRACKET T_SEMI T_LCURLYBRACKET T_RCURLYBRACKET T_EQUAL T_RETURN
+%token T_FLOAT T_CHAR T_DOUBLE T_VOID T_STARPTR T_ADD T_MINUS T_MULT T_DIVID T_MOD T_COMMA T_IF T_ELSE
+%token
+
+%type <expr> PROGRAM FULL_DECLEAR DECLEAR DECLARATOR INIT_DECLARATOR INIT_DECLARATOR_LIST DIRECT_DECLARATOR
+%type <expr> ASSIGN_EXPR EXPR PRIMARY_EXPR NOTARRAY_EXPR INITIALIZER BLOCK_ITEM BLOCK_ITEM_LIST COMP_STAT
+%type <expr> FUNC_LIST FUNCTION
+%type <number> T_NUMBER
+%type <string> TYPE_SPECIFIER DECLEAR_SPECIFIERS T_INT T_ID T_ADD T_MINUS T_MULT T_DIVID T_MOD OPERATOR
+
+%start ROOT
+
+%%
+ROOT : PROGRAM { g_root = $1; }
+
+PROGRAM: FULL_DECLEAR { $$ = $1;}
+       | PROGRAM FULL_DECLEAR { $$ = new ProgramOther($1,$2);}
+
+FULL_DECLEAR : DECLEAR { $$ = $1;}
+             | FUNCTION {$$ = $1;}
+
+FUNCTION : DECLEAR_SPECIFIERS DECLARATOR T_LBRACKET FUNC_LIST T_RBRACKET COMP_STAT {$$ = new Function_Four_Comp($1, $2, $4, $6);}
+         | DECLEAR_SPECIFIERS DECLARATOR T_LBRACKET T_RBRACKET COMP_STAT {$$ = new Function_Three_Comp(*$1,$2,$5);}
+         | DECLARATOR T_LBRACKET FUNC_LIST T_RBRACKET COMP_STAT {$$ = new Function_Three_Comp_Program($1,$3,$5);}
+         | DECLARATOR T_LBRACKET T_RBRACKET COMP_STAT {$$ = new Function($1,$4);}
+
+FUNC_LIST :  DECLEAR_SPECIFIERS DECLARATOR {$$ = new Func_List(*$1,$2);}
+          |  DECLEAR_SPECIFIERS DECLARATOR T_COMMA FUNC_LIST {$$ = new Func_List_Rec(*$1,$2,$4);}
+
+
+COMP_STAT : T_LCURLYBRACKET BLOCK_ITEM_LIST T_RCURLYBRACKET {$$ = new Comp_Stat($2);}
+          | T_LCURLYBRACKET T_RCURLYBRACKET  { $$ = new NotUsed();}
+
+BLOCK_ITEM_LIST : BLOCK_ITEM {$$ = new Block_Item_List($1);}
+                | BLOCK_ITEM_LIST BLOCK_ITEM {$$ = new Block_Item_List_Rec($1,$2);}
+
+BLOCK_ITEM : DECLEAR                {$$ = $1;}
+          // | STATEMENT
+
+/*STATEMENT : SELECTION_STATEMENT
+        //  | ITERATION_STATEMENT
+
+SELECTION_STATEMENT : T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
+                    | T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT*/
+
+DECLEAR : DECLEAR_SPECIFIERS T_SEMI { $$ = new NotUsed();}
+        | DECLEAR_SPECIFIERS INIT_DECLARATOR_LIST T_SEMI { $$ = new Declear($2);}
+
+DECLEAR_SPECIFIERS : TYPE_SPECIFIER { $$ = $1;}
+                      // | TYPE_SPECIFIER DECLARATION_SPECIFIERS { $$ = new declaration_specifiers(*$1,*$2);}
+
+INIT_DECLARATOR_LIST : INIT_DECLARATOR { $$ = $1;}
+                     //| INIT_DECLARATOR T_COMMA INIT_DECLARATOR_LIST
+
+INIT_DECLARATOR : DECLARATOR { $$ = $1;}
+                | DECLARATOR T_EQUAL INITIALIZER {$$ = new InitDeclar($1,$3);}
+
+INITIALIZER : ASSIGN_EXPR      {$$ = $1;}
+
+ASSIGN_EXPR : NOTARRAY_EXPR      {$$ = $1;}
+            //: NOTARRAY_EXPR ASSIGN_OP ASSIGN_EXPR
+
+NOTARRAY_EXPR : PRIMARY_EXPR      {$$ = $1;}
+              | PRIMARY_EXPR OPERATOR NOTARRAY_EXPR {$$ = new OperatorProgram($1,$2,$3);}
+
+
+PRIMARY_EXPR : T_LBRACKET EXPR T_RBRACKET  {$$ = $2;}
+             | T_NUMBER         {$$ = new Number($1);}
+             //| T_CONSTANT
+             | T_ID             {$$ = new Variable(*$1);}
+             /*| T_STRING
+             | GENERIC_SELECTION*/
+/*
+T_CONSTANT : I_CONST
+           | F_CONST
+           | EMULATOR_CONST
+
+EMULATOR_CONST : T_ID
+
+STRING : T_FUNC
+       | T_STRING
+
+GENERIC_SELECTION : T_GENERIC T_LBRACKET ASSIGN_EXPR T_COMMA GENERIC_ASSOC_LIST T_RBRACKET
+
+GENERIC_ASSOC_LIST : GENERIC_ASSOC
+                   | GENERIC_ASSOC_LIST T_COMMA GENERIC_ASSOC
+
+GENERIC_ASSOC : TYPE_NAME T_COLON ASSIGN_EXPR
+              | T_DEFAULT T_COLON ASSIGN_EXPR
+
+POSTFIX_EXPR : PRIMARY_EXPR
+             | POSTFIX_EXPR T_LSQRBRACKET EXPR T_RSQRBRACKET
+             | POSTFIX_EXPR T_LBRACKET T_RBRACKET
+             | POSTFIX_EXPR T_LBRACKET ARGUE_EXPR_LIST T_RBRACKET
+             | POSTFIX_EXPR T_FULL_STOP IDENTIFIER
+             | POSTFIX_EXPR PTR_OP IDENTIFIER
+             | POSTFIX_EXPR T_INC_OPERATOR
+             | POSTFIX_EXPR T_DEC_OPERATOR
+             | T_LBRACKET TYPE_NAME T_RBRACKET T_LSQRBRACKET INITIALIZER_LIST T_RSQRBRACKET
+             | T_LBRACKET TYPE_NAME T_RBRACKET T_LSQRBRACKET INITIALIZER_LIST T_COMMA T_RSQRBRACKET
+
+ARGUE_EXPR_LIST : ASSIGN_EXPR
+	              | ARGUE_EXPR_LIST T_COMMA ASSIGN_EXPR*/
+
+
+EXPR : ASSIGN_EXPR              {$$ = $1;}
+     | EXPR ASSIGN_EXPR         {$$ = new ProgramOther($1,$2);}
+
+DECLARATOR : T_STARPTR DIRECT_DECLARATOR { $$ = $2;}
+           | DIRECT_DECLARATOR {$$ = $1;}
+
+OPERATOR : T_ADD               {$$ = new std::string("+");}
+         | T_MINUS             {$$ = new std::string("-");}
+         | T_MULT              {$$ = new std::string("*");}
+         | T_DIVID             {$$ = new std::string("/");}
+         | T_EQUAL             {$$ = new std::string("=");}
+         | T_MOD               {$$ = new std::string("%%");}
+
+/*ASSIGN_OP : T_ADD               {$$ = new std::string("+");}
+          | T_MINUS             {$$ = new std::string("-");}
+          | T_MULT              {$$ = new std::string("*");}
+          | T_DIVID             {$$ = new std::string("/");}
+          | T_EQUAL             {$$ = new std::string("=");}
+          | T_MOD               {$$ = new std::string("\\");}*/
+
+DIRECT_DECLARATOR : T_ID { $$ = new Variable(*$1); }
+
+TYPE_SPECIFIER : T_INT { $$ = new std::string("int"); }
+
+
+%%
+
+const Program *g_root; // Definition of variable (to match declaration earlier)
+
+const Program *parseAST()
+{
+  g_root=0;
+  yyparse();
+  return g_root;
+}
+

@@ -1,0 +1,4 @@
+Seq [
+    Assign : x [ 5 ]
+    Assign : y [ Add [ x 5 ] ]
+]

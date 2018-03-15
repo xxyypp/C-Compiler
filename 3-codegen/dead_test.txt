@@ -1,0 +1,8 @@
+Seq [
+  Assign : y [ 5 ]
+  If [ 0
+    Assign : x [ 10 ]
+    Assign : x [ 11 ]
+  ]
+  Add [ x If [ 1 3 5 ] ]
+]

@@ -1,0 +1,199 @@
+{
+  "login": "py715",
+  "notes": [
+    "This test contains two 'fill-in-the-blanks' and eight multiple choice",
+    "questions. In each case you should fill in the values for JSON keys matching 'answer*'.",
+    "",
+    "There are 10 questions, each of which is worth (nominally) 4 marks each, for a total of 40.",
+    "",
+    "Each fill-in-the-blanks question has four answer fields, each is worth 1 mark",
+    "for a correct answer, and 0 for an incorrect answer.",
+    "",
+    "The answer for multiple choice questions should be the index of the",
+    "answer you are selecting (i.e. and integer from 0 to 3). This can be",
+    "expressed either as an integer, or as string containing an integer",
+    "(just type over the '?' that is pre-filled in). Any missing or invalid",
+    "answer indices (e.g. '?') will result in zero marks for that question.",
+    "",
+    "In the case of multiple choice questions, you should indicate your",
+    "confidence using the 'confidence' key:",
+    "",
+    "  High:   5 marks for a correct answer,   -2 for an incorrect answer.",
+    "  Medium: 4 marks for a correct answer,   -1 for an incorrect answer.",
+    "  Low:    3 marks for a correct answer,    0 for an incorrect answer.",
+    "  ",
+    "The confidence value is not case sensitive. A missing or invalid",
+    "confidence value will be assumed to be 'Medium'.",
+    "",
+    "Marks are saturated below at 0 and above at 40.",
+    "",
+    "This test is 10% of your module marks. You should not collaborate with",
+    "other students on the test, nor discuss the questions during the test",
+    "period. It is open book in the sense that you can use the lecture notes,",
+    "books, and other passive resources. Any active questions (posting to",
+    "forums, StackOverflow, etc.) is not allowed.",
+    "",
+    "Note that a confidence level of \"High\" implies that you could",
+    "verbally defend your answer if necessary, or could produce notes to",
+    "support your reasoning. A confidence level of \"Medium\" implies",
+    "that you can at least explain how you were able to discount",
+    "some of the options. It is not expected that such a defence is",
+    "necessary, but remember that standard rules on plagiarism and",
+    "cheating apply to this test.",
+    "",
+    "Genuine errors in the questions or answers (not just typoes or grammar",
+    "problem) can be highlighted by attaching a key called \"error\" to the",
+    "question, with a string value or array of strings describing the problem.",
+    "A correct error string gets 6 marks for the question (regardless of",
+    "what answer is given). An incorrect/invalid error string gets a penalty",
+    "of -1, then the given answer is evaluated. Even if there is an error string,",
+    "you must still choose an answer and a confidence.",
+    "",
+    "Submit your completed JSON file to blackboard. You can submit",
+    "as many times as you like before the deadline.",
+    ""
+  ],
+  "questions": [
+    {
+      "qid": 0,
+      "question": [
+        "Give examples of strings matching the regex 'a?(x+|ya)z*'",
+        "containing 1, 2, 3, and 4 characters. The ' character is not part of the regex."
+      ],
+      "answer_length1": "x",
+      "answer_length2": "ya",
+      "answer_length3": "yaz",
+      "answer_length4": "ayaz"
+    },
+    {
+      "qid": 1,
+      "question": [
+        "Give examples of strings matching the regex '([6-6G-H]+|x*)(z*[a-z]+)'",
+        "containing 1, 2, 3, and 4 characters. The ' character is not part of the regex."
+      ],
+      "answer_length1": "a",
+      "answer_length2": "ab",
+      "answer_length3": "abc",
+      "answer_length4": "abcd"
+    },
+    {
+      "qid": 2,
+      "question": [
+        "What is the asymptotic time complexity of matching a string with n characters",
+        "against a regex with k alternatives (i.e. '(A1|A2|...|Ak)' where each of A1..Ak is",
+        "a regular expression)?"
+      ],
+      "choices": {
+        "0": "Omega(n+k)",
+        "1": "O(n log k)",
+        "2": "Theta(n)",
+        "3": "O(n*k)"
+      },
+      "answer": "1", -2 should be Theta(n)
+      "confidence": "High" 
+    },
+    {
+      "qid": 3,
+      "question": [
+        "Is the following grammar regular? :",
+        "  1: X -> X 'a'",
+        "  2: X -> X 'b'",
+        "  3: X -> 'z'",
+        "  4: X -> 'a' 'b'"
+      ],
+      "choices": {
+        "0": "No, because of rule 3",
+        "1": "No, because of rules 1 and 2.",
+        "2": "Yes, because it is left-linear",
+        "3": "No, because of rule 4"
+      },
+      "answer": "3",
+      "confidence": "High"
+    },
+    {
+      "qid": 4,
+      "question": [
+        "A regular expression over an alphabet of k characters has been converted",
+        "to an NFA with m states. If it is now converted to a DFA, what is a (tight) worst-case",
+        "space complexity for the number of transition table entries? "
+      ],
+      "choices": {
+        "0": "O(2^(k+m))",
+        "1": "O(2^k 2^m)",
+        "2": "O(k 2^m)",
+        "3": "Theta(2^m)"
+      },
+      "answer": "2",
+      "confidence": "Medium"
+    },
+    {
+      "qid": 5,
+      "question": [
+        "An NFA contains an epsilon edge from state SA to state SB.",
+        "Given there could be many other edges and states, which of the following is incorrect?"
+      ],
+      "choices": {
+        "0": "SA is not in the epsilon closure of SB",
+        "1": "Consuming a character could take us from SA to SB",
+        "2": "It is possible to move from SA to SB without consuming a character.",
+        "3": "SB is in the epsilon closure of SA"
+      },
+      "answer": "0",
+      "confidence": "High"
+    },
+    {
+      "qid": 6,
+      "question": [
+        "Many regex engines support an extension that matches between m and n copies",
+        "of a pattern A, usually with the syntax A{m,n}. Which of the following is true?"
+      ],
+      "choices": {
+        "0": "This extension requires back-tracking.",
+        "1": "The regex engine can re-write the extension in terms of * (Kleene Star) to get a standard regex",
+        "2": "This extension cannot be supported in a DFA-based regex engine.",
+        "3": "The extension can be supported in an NFA-based regex engine."
+      },
+      "answer": "0",3 is correct -1
+      "confidence": "Medium"
+    },
+    {
+      "qid": 7,
+      "question": [
+        "A designer has converted a regex to an NFA with m states and k input characters.",
+        "Is it possible to implement the NFA as a Moore machine, such that it consumes one character per cycle?"
+      ],
+      "choices": {
+        "0": "Yes, but they must convert it to a DFA first using subset-construction.",
+        "1": "No, the non-determinism means that you might not be able to find a finite set of states.",
+        "2": "No, you cannot implement an NFA as a Moore machine due to possible epsilon transitions.",
+        "3": "Yes, using m parallel k x m lookup tables (i.e. ROMs with log2(k)-bit address and m-bit data)."
+      },
+      "answer": "2",3 is correct -1
+      "confidence": "Medium"
+    },
+    {
+      "qid": 8,
+      "question": "Which of the following is true of lexers?",
+      "choices": {
+        "0": "A lexer groups characters into terminals.",
+        "1": "A lexer does not use a grammar.",
+        "2": "A lexer cannot detect errors.",
+        "3": "Lexers rely on back-tracking."
+      },
+      "answer": "2",1 is correct -1
+      "confidence": "Medium"
+    },
+    {
+      "qid": 9,
+      "question": "What is the purpose of an accepting state in a lexing automata?",
+      "choices": {
+        "0": "It takes the lexer one step closer to enlightenment.",
+        "1": "Lexing of the current token should stop once an accepting state is reached.",
+        "2": "It records the fact that the end of stream character has been reached.",
+        "3": "It indicates when the characters consumed so far match one of the token regexes."
+      },
+      "answer": "3",
+      "confidence": "Medium"
+    }
+  ]
+}

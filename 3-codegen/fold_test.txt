@@ -1,0 +1,6 @@
+Seq [
+  Assign : x [ 10 ]
+  Assign : x [
+            Sub [ x Add [ 4 5 ] ]
+            ]
+]
