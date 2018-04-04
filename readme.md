@@ -44,7 +44,7 @@ via blackboard (see the [notes in exercise 1](1-lexer/readme.md#Submission)).
 
 The final coursework compiler output is:
 
-1 - [C89 Compiler](C89 Compiler) : 
+1 - [C89 Compiler](C89%20Compiler) : 
 
 Assessment and Feedback
 =======================
