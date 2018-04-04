@@ -1,2 +1,4 @@
 # langproc-2016-cw-py715
-Identifier should not be start with a digit, change it later!
+1. create test file (default tmp.c)
+2. Run "make.sh" to build the project
+3. Or run "run_test_deliverable.sh" to test with test-case
