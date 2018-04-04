@@ -1,8 +1,9 @@
-Lab exercises for Language Processors 2016/2017
+C89 Compiler 2016/2017
 ===============================================
 
 This repository contains the specification for
-the three lab exercises for Language Processors.
+the three lab exercises and the final project
+for Language Processors.
 The three exercises are equally weighted, and
 are worth 33.3% of your computing lab mark.
 
@@ -40,6 +41,10 @@ The three exercises are:
 The code for each exercise will be submitted via github,
 and the hash of the commit to be tested will be submitted
 via blackboard (see the [notes in exercise 1](1-lexer/readme.md#Submission)).
+
+The final coursework compiler output is:
+
+1 - [C89 Compiler](C89 Compiler) : 
 
 Assessment and Feedback
 =======================
